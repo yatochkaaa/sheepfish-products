@@ -1,6 +1,6 @@
-import React from "react";
+import React, { SetStateAction } from "react";
 import { Dropdown } from "react-bootstrap";
-import { COL } from "../utils/consts";
+import { COL, sortableCols } from "../utils/consts";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   getAllProducts,
@@ -9,11 +9,29 @@ import {
 
 interface Props {
   col: COL;
+  isAsc: boolean;
+  setCol: () => void;
+  setIsAsc: React.Dispatch<SetStateAction<boolean>>;
+  filteredCol: COL;
 }
 
-const ColItem: React.FC<Props> = ({ col }) => {
+const ColItem: React.FC<Props> = ({
+  col,
+  isAsc,
+  setCol,
+  setIsAsc,
+  filteredCol,
+}) => {
   const dispatch = useAppDispatch();
   const { categories } = useAppSelector((state) => state.productReducer);
+
+  const setSortCol = () => {
+    if (col === filteredCol) {
+      setIsAsc(!isAsc);
+    } else {
+      setCol();
+    }
+  };
 
   if (col === COL.CATEGORY) {
     return (
@@ -53,6 +71,14 @@ const ColItem: React.FC<Props> = ({ col }) => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
+      </th>
+    );
+  }
+
+  if (sortableCols.includes(col)) {
+    return (
+      <th style={{ cursor: "pointer" }} onClick={setSortCol}>
+        {col}
       </th>
     );
   }

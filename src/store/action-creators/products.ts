@@ -7,7 +7,8 @@ export const getAllProducts = createAsyncThunk(
   "products/getAll",
   async (_, thunkAPI) => {
     try {
-      const res = await axios.get(`${BASE_URL}/products`);
+      const res = await axios.get(`${BASE_URL}/products?limit=100`);
+      console.log(res)
       return res.data.products;
     } catch (e) {
       return thunkAPI.rejectWithValue("Failed to load products");
@@ -41,7 +42,14 @@ export const getOneProduct = createAsyncThunk(
 
 export const deleteProduct = createAsyncThunk(
   "products/delete",
-  (id: number) => id
+  async (id: number, thunkAPI) => {
+    try {
+      const res = await axios.delete(`${BASE_URL}/products/${id}`);
+      return res.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue("Failed to load product");
+    }
+  }
 );
 
 export const getAllCategories = createAsyncThunk(
@@ -67,5 +75,3 @@ export const getByCategory = createAsyncThunk(
     }
   }
 );
-
-

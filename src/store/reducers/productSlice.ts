@@ -75,12 +75,10 @@ export const productSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
-    [deleteProduct.fulfilled.type]: (state, action: PayloadAction<number>) => {
+    [deleteProduct.fulfilled.type]: (state, action: PayloadAction<IProduct>) => {
       state.isLoading = false;
       state.error = null;
-      state.data = state.data.filter(
-        (product) => product.id !== action.payload
-      );
+      state.data = state.data.filter(product => product.id !== action.payload.id);
     },
     [deleteProduct.pending.type]: (state) => {
       state.isLoading = true;
