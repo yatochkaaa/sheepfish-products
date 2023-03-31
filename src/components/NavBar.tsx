@@ -13,7 +13,7 @@ const NavBar: React.FC = () => {
           variant="outline-light"
           onClick={() => navigate(ROUTE.ADMIN)}
         >
-          Админ панель
+          Адмін панель
         </Button>
       </Container>
     </Navbar>
