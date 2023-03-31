@@ -4,6 +4,7 @@ import {
   deleteProduct,
   getAllProducts,
   getOneProduct,
+  searchProducts,
 } from "../action-creators/products";
 
 export interface ProductState {
@@ -37,6 +38,21 @@ export const productSlice = createSlice({
       state.isLoading = true;
     },
     [getAllProducts.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [searchProducts.fulfilled.type]: (
+      state,
+      action: PayloadAction<IProduct[]>
+    ) => {
+      state.isLoading = false;
+      state.error = null;
+      state.data = action.payload;
+    },
+    [searchProducts.pending.type]: (state) => {
+      state.isLoading = true;
+    },
+    [searchProducts.rejected.type]: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.error = action.payload;
     },

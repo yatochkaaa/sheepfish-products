@@ -15,6 +15,18 @@ export const getAllProducts = createAsyncThunk(
   }
 );
 
+export const searchProducts = createAsyncThunk(
+  "products/search",
+  async (name: string, thunkAPI) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/products/search?q=${name}`);
+      return res.data.products;
+    } catch (e) {
+      return thunkAPI.rejectWithValue("Failed to load products");
+    }
+  }
+);
+
 export const getOneProduct = createAsyncThunk(
   "products/getOne",
   async (id: number, thunkAPI) => {

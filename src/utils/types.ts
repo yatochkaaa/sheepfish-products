@@ -11,3 +11,9 @@ export interface IProduct {
   thumbnail: string;
   images: string[];
 }
+
+export interface ITableHeader {
+  id: number;
+  title: string;
+  sortable: boolean
+}
