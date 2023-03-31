@@ -3,7 +3,7 @@ import { Table } from "react-bootstrap";
 import { COL } from "../utils/consts";
 import { IProduct } from "../utils/types";
 import ProductItem from "./ProductItem";
-import TableHeader from "./TableHeader";
+import ColItem from "./ColItem";
 
 interface Props {
   products: IProduct[];
@@ -15,9 +15,7 @@ const ProductList: React.FC<Props> = ({ products }) => {
       <thead className="align-middle text-center">
         <tr>
           {Object.values(COL).map((col) => (
-            <TableHeader
-              col={col}
-            />
+            <ColItem key={col} col={col} />
           ))}
         </tr>
       </thead>

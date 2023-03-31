@@ -2,13 +2,16 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { IProduct } from "../../utils/types";
 import {
   deleteProduct,
+  getAllCategories,
   getAllProducts,
+  getByCategory,
   getOneProduct,
   searchProducts,
 } from "../action-creators/products";
 
 export interface ProductState {
   data: IProduct[];
+  categories: string[];
   selectedProduct: IProduct | null;
   isLoading: boolean;
   error: string | null;
@@ -16,6 +19,7 @@ export interface ProductState {
 
 const initialState: ProductState = {
   data: [],
+  categories: [],
   selectedProduct: null,
   isLoading: false,
   error: null,
@@ -74,12 +78,50 @@ export const productSlice = createSlice({
     [deleteProduct.fulfilled.type]: (state, action: PayloadAction<number>) => {
       state.isLoading = false;
       state.error = null;
-      state.data = state.data.filter((product) => product.id !== action.payload);
+      state.data = state.data.filter(
+        (product) => product.id !== action.payload
+      );
     },
     [deleteProduct.pending.type]: (state) => {
       state.isLoading = true;
     },
     [deleteProduct.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [getAllCategories.fulfilled.type]: (
+      state,
+      action: PayloadAction<string[]>
+    ) => {
+      state.isLoading = false;
+      state.error = null;
+      state.categories = action.payload;
+    },
+    [getAllCategories.pending.type]: (state) => {
+      state.isLoading = true;
+    },
+    [getAllCategories.rejected.type]: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [getByCategory.fulfilled.type]: (
+      state,
+      action: PayloadAction<IProduct[]>
+    ) => {
+      state.isLoading = false;
+      state.error = null;
+      state.data = action.payload;
+    },
+    [getByCategory.pending.type]: (state) => {
+      state.isLoading = true;
+    },
+    [getByCategory.rejected.type]: (
+      state,
+      action: PayloadAction<string>
+    ) => {
       state.isLoading = false;
       state.error = action.payload;
     },

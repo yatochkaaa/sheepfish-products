@@ -43,3 +43,29 @@ export const deleteProduct = createAsyncThunk(
   "products/delete",
   (id: number) => id
 );
+
+export const getAllCategories = createAsyncThunk(
+  "products/categories/getAll",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/products/categories`);
+      return res.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue("Failed to load categories");
+    }
+  }
+);
+
+export const getByCategory = createAsyncThunk(
+  "products/getByCategory",
+  async (category: string, thunkAPI) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/products/category/${category}`);
+      return res.data.products;
+    } catch (e) {
+      return thunkAPI.rejectWithValue("Failed to load categories");
+    }
+  }
+);
+
+
