@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { getAllProducts } from "../store/action-creators/products";
+import { getAllCategories, getAllProducts } from "../store/action-creators/products";
 import { Container } from "react-bootstrap";
 import ProductList from "../components/ProductList";
 import ProductSearch from "../components/ProductSearch";
@@ -12,6 +12,7 @@ const Shop: React.FC = () => {
 
   React.useEffect(() => {
     dispatch(getAllProducts());
+    dispatch(getAllCategories())
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
