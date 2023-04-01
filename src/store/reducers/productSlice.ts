@@ -6,21 +6,24 @@ import {
   getAllProducts,
   getByCategory,
   getOneProduct,
+  postProduct,
   searchProducts,
 } from "../action-creators/products";
 
 export interface ProductState {
-  data: IProduct[];
+  products: IProduct[];
   categories: string[];
   selectedProduct: IProduct | null;
+  total: number;
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: ProductState = {
-  data: [],
+  products: [],
   categories: [],
   selectedProduct: null,
+  total: 0,
   isLoading: false,
   error: null,
 };
@@ -36,7 +39,8 @@ export const productSlice = createSlice({
     ) => {
       state.isLoading = false;
       state.error = null;
-      state.data = action.payload;
+      state.products = action.payload;
+      state.total = action.payload.length
     },
     [getAllProducts.pending.type]: (state) => {
       state.isLoading = true;
@@ -51,7 +55,7 @@ export const productSlice = createSlice({
     ) => {
       state.isLoading = false;
       state.error = null;
-      state.data = action.payload;
+      state.products = action.payload;
     },
     [searchProducts.pending.type]: (state) => {
       state.isLoading = true;
@@ -78,7 +82,7 @@ export const productSlice = createSlice({
     [deleteProduct.fulfilled.type]: (state, action: PayloadAction<IProduct>) => {
       state.isLoading = false;
       state.error = null;
-      state.data = state.data.filter(product => product.id !== action.payload.id);
+      state.products = state.products.filter(product => product.id !== action.payload.id);
     },
     [deleteProduct.pending.type]: (state) => {
       state.isLoading = true;
@@ -111,12 +115,31 @@ export const productSlice = createSlice({
     ) => {
       state.isLoading = false;
       state.error = null;
-      state.data = action.payload;
+      state.products = action.payload;
     },
     [getByCategory.pending.type]: (state) => {
       state.isLoading = true;
     },
     [getByCategory.rejected.type]: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [postProduct.fulfilled.type]: (
+      state,
+      action: PayloadAction<IProduct>
+    ) => {
+      state.isLoading = false;
+      state.error = null;
+      state.products = [...state.products, action.payload];
+      state.total = state.total + 1;
+    },
+    [postProduct.pending.type]: (state) => {
+      state.isLoading = true;
+    },
+    [postProduct.rejected.type]: (
       state,
       action: PayloadAction<string>
     ) => {

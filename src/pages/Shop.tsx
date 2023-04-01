@@ -8,7 +8,7 @@ import Loader from "../components/Loader";
 
 const Shop: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { data, isLoading } = useAppSelector((state) => state.productReducer);
+  const { products, isLoading } = useAppSelector((state) => state.productReducer);
 
   React.useEffect(() => {
     dispatch(getAllProducts());
@@ -18,7 +18,7 @@ const Shop: React.FC = () => {
   return (
     <Container className="mt-4">
       <ProductSearch />
-      {!isLoading ? <ProductList products={data} /> : <Loader />}
+      {!isLoading ? <ProductList products={products} /> : <Loader />}
     </Container>
   );
 };

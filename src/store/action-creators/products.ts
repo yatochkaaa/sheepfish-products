@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { IProduct } from "../../utils/types";
 
 const BASE_URL = "https://dummyjson.com";
 
@@ -8,7 +9,6 @@ export const getAllProducts = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const res = await axios.get(`${BASE_URL}/products?limit=100`);
-      console.log(res)
       return res.data.products;
     } catch (e) {
       return thunkAPI.rejectWithValue("Failed to load products");
@@ -36,6 +36,18 @@ export const getOneProduct = createAsyncThunk(
       return res.data;
     } catch (e) {
       return thunkAPI.rejectWithValue("Failed to load product");
+    }
+  }
+);
+
+export const postProduct = createAsyncThunk(
+  "products/post",
+  async (product: IProduct, thunkAPI) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/products/add`, product);
+      return res.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue("Failed to post product");
     }
   }
 );

@@ -1,15 +1,25 @@
 import React from "react";
-import { Button, Form, FormGroup, Modal } from "react-bootstrap";
+import { Button, Form, FormGroup, InputGroup, Modal } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useAppDispatch } from "../../store/hooks";
+import { postProduct } from "../../store/action-creators/products";
 
 interface Props {
   show: boolean;
   onHide: () => void;
   categories: string[];
+  totalProducts: number;
 }
 
-const Create: React.FC<Props> = ({ show, onHide, categories }) => {
+const Create: React.FC<Props> = ({
+  show,
+  onHide,
+  categories,
+  totalProducts,
+}) => {
+  const dispatch = useAppDispatch();
+
   const validationSchema = yup.object({
     category: yup
       .string()
@@ -24,7 +34,7 @@ const Create: React.FC<Props> = ({ show, onHide, categories }) => {
       .positive("Ціна не може бути меншою за нуль"),
     thumbnail: yup
       .string()
-      .url()
+      .url("Зображення має бути дійсною URL-адресою")
       .required("Необхідно вказати посилання на зображення"),
   });
 
@@ -39,7 +49,17 @@ const Create: React.FC<Props> = ({ show, onHide, categories }) => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      const newProduct = {
+        ...values,
+        id: totalProducts + 1,
+        price: Number(values.price),
+        rating: 0,
+        stock: 0,
+        discountPercentage: 0,
+        images: [],
+      };
+      dispatch(postProduct(newProduct));
+      onHide();
     },
   });
 
@@ -62,8 +82,8 @@ const Create: React.FC<Props> = ({ show, onHide, categories }) => {
           Добавить устройство
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={formik.handleSubmit}>
+      <Form onSubmit={formik.handleSubmit}>
+        <Modal.Body>
           <FormGroup controlId="category">
             <Form.Select
               defaultValue="Choose a category"
@@ -89,12 +109,11 @@ const Create: React.FC<Props> = ({ show, onHide, categories }) => {
             </Form.Text>
           </FormGroup>
 
-          <FormGroup controlId="title">
+          <FormGroup className="mt-3" controlId="title">
             <Form.Control
               value={formik.values.title}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="mt-3"
               placeholder="Введіть назву продукту"
             />
             <Form.Text className="text-danger">
@@ -104,12 +123,11 @@ const Create: React.FC<Props> = ({ show, onHide, categories }) => {
             </Form.Text>
           </FormGroup>
 
-          <FormGroup controlId="description">
+          <FormGroup className="mt-3" controlId="description">
             <Form.Control
               value={formik.values.description}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="mt-3"
               as="textarea"
               placeholder="Введіть опис продукту"
               rows={3}
@@ -121,12 +139,11 @@ const Create: React.FC<Props> = ({ show, onHide, categories }) => {
             </Form.Text>
           </FormGroup>
 
-          <FormGroup controlId="brand">
+          <FormGroup className="mt-3" controlId="brand">
             <Form.Control
               value={formik.values.brand}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="mt-3"
               placeholder="Введіть бренд продукту"
             />
             <Form.Text className="text-danger">
@@ -136,15 +153,17 @@ const Create: React.FC<Props> = ({ show, onHide, categories }) => {
             </Form.Text>
           </FormGroup>
 
-          <FormGroup controlId="price">
-            <Form.Control
-              value={formik.values.price}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className="mt-3"
-              placeholder="Введіть вартість продукту"
-              type="number"
-            />
+          <FormGroup className="mt-3" controlId="price">
+            <InputGroup>
+              <Form.Control
+                value={formik.values.price}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                placeholder="Введіть вартість продукту"
+                type="number"
+              />
+              <InputGroup.Text>₴</InputGroup.Text>
+            </InputGroup>
             <Form.Text className="text-danger">
               {formik.touched.price && formik.errors.price ? (
                 <div className="text-danger">{formik.errors.price}</div>
@@ -152,12 +171,11 @@ const Create: React.FC<Props> = ({ show, onHide, categories }) => {
             </Form.Text>
           </FormGroup>
 
-          <FormGroup controlId="thumbnail">
+          <FormGroup className="my-3" controlId="thumbnail">
             <Form.Control
               value={formik.values.thumbnail}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="mt-3"
               placeholder="Введіть посилання на зображення"
             />
             <Form.Text className="text-danger">
@@ -166,20 +184,20 @@ const Create: React.FC<Props> = ({ show, onHide, categories }) => {
               ) : null}
             </Form.Text>
           </FormGroup>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer className="d-flex justify-content-between">
-        <Button variant="outline-dark" onClick={onHide}>
-          Закрыть
-        </Button>
-        <Button
-          type="submit"
-          variant={isValidSubmit() ? "outline-success" : "outline-danger"}
-          disabled={!isValidSubmit()}
-        >
-          Добавить
-        </Button>
-      </Modal.Footer>
+        </Modal.Body>
+        <Modal.Footer className="d-flex justify-content-between">
+          <Button variant="outline-dark" onClick={onHide}>
+            Закрыть
+          </Button>
+          <Button
+            type="submit"
+            variant={isValidSubmit() ? "outline-success" : "outline-danger"}
+            disabled={!isValidSubmit()}
+          >
+            Добавить
+          </Button>
+        </Modal.Footer>
+      </Form>
     </Modal>
   );
 };

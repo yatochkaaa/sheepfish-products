@@ -6,7 +6,7 @@ import { getAllCategories } from "../store/action-creators/products";
 
 const Admin: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { categories } = useAppSelector((state) => state.productReducer);
+  const { categories, total } = useAppSelector((state) => state.productReducer);
   const [productVisible, setProductVisible] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -23,6 +23,7 @@ const Admin: React.FC = () => {
         Додати продукт
       </Button>
       <CreateProduct
+        totalProducts={total}
         categories={categories}
         show={productVisible}
         onHide={() => setProductVisible(false)}
