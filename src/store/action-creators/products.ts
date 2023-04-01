@@ -41,7 +41,7 @@ export const getOneProduct = createAsyncThunk(
 );
 
 export const postProduct = createAsyncThunk(
-  "products/post",
+  "products/add",
   async (product: IProduct, thunkAPI) => {
     try {
       const res = await axios.post(`${BASE_URL}/products/add`, product);

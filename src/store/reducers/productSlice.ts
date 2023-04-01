@@ -14,7 +14,7 @@ export interface ProductState {
   products: IProduct[];
   categories: string[];
   selectedProduct: IProduct | null;
-  total: number;
+  lastId: number;
   isLoading: boolean;
   error: string | null;
 }
@@ -23,7 +23,7 @@ const initialState: ProductState = {
   products: [],
   categories: [],
   selectedProduct: null,
-  total: 0,
+  lastId: 0,
   isLoading: false,
   error: null,
 };
@@ -40,7 +40,7 @@ export const productSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       state.products = action.payload;
-      state.total = action.payload.length
+      state.lastId = action.payload.length
     },
     [getAllProducts.pending.type]: (state) => {
       state.isLoading = true;
@@ -134,7 +134,7 @@ export const productSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       state.products = [...state.products, action.payload];
-      state.total = state.total + 1;
+      state.lastId = state.lastId + 1;
     },
     [postProduct.pending.type]: (state) => {
       state.isLoading = true;

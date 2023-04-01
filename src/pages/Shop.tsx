@@ -12,7 +12,7 @@ const Shop: React.FC = () => {
 
   React.useEffect(() => {
     dispatch(getAllProducts());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

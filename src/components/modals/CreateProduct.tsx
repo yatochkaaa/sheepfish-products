@@ -9,14 +9,14 @@ interface Props {
   show: boolean;
   onHide: () => void;
   categories: string[];
-  totalProducts: number;
+  productsLastId: number;
 }
 
 const Create: React.FC<Props> = ({
   show,
   onHide,
   categories,
-  totalProducts,
+  productsLastId,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -51,7 +51,7 @@ const Create: React.FC<Props> = ({
     onSubmit: (values) => {
       const newProduct = {
         ...values,
-        id: totalProducts + 1,
+        id: productsLastId + 1,
         price: Number(values.price),
         rating: 0,
         stock: 0,
@@ -59,6 +59,7 @@ const Create: React.FC<Props> = ({
         images: [],
       };
       dispatch(postProduct(newProduct));
+      formik.resetForm();
       onHide();
     },
   });
