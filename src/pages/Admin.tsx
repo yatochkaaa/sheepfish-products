@@ -11,8 +11,8 @@ const Admin: React.FC = () => {
 
   React.useEffect(() => {
     dispatch(getAllCategories());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Container className="d-flex flex-column">
@@ -22,9 +22,13 @@ const Admin: React.FC = () => {
       >
         Додати продукт
       </Button>
-      <CreateProduct categories={categories} show={productVisible} onHide={() => setProductVisible(false)} />
+      <CreateProduct
+        categories={categories}
+        show={productVisible}
+        onHide={() => setProductVisible(false)}
+      />
     </Container>
   );
-}
+};
 
 export default Admin;
