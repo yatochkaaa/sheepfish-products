@@ -12,6 +12,11 @@ const ProductSearch: React.FC = () => {
   const [value, setValue] = React.useState<string>("");
   const [isFiltered, setIsFiltered] = React.useState<boolean>(false);
 
+  React.useEffect(() => {
+    search();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
   const search = () => {
     dispatch(searchProducts(value));
     setIsFiltered(true);
@@ -41,13 +46,10 @@ const ProductSearch: React.FC = () => {
       />
 
       {value && (
-        <Button variant="danger" onClick={reset}>
+        <Button variant="danger" className="px-4" onClick={reset}>
           X
         </Button>
       )}
-      <Button variant="dark" onClick={search}>
-        Пошук
-      </Button>
     </InputGroup>
   );
 };

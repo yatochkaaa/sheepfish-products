@@ -21,6 +21,11 @@ const ProductPage: React.FC = () => {
     (state) => state.productReducer
   );
   const { id } = useParams();
+  const [index, setIndex] = React.useState(0);
+
+  const handleSelect = (selectedIndex: number) => {
+    setIndex(selectedIndex);
+  };
 
   React.useEffect(() => {
     if (id) {
@@ -45,10 +50,15 @@ const ProductPage: React.FC = () => {
     <Container className="mt-3">
       <Row>
         <Col className="d-flex align-items-center" md={4}>
-          <Carousel>
+          <Carousel activeIndex={index} onSelect={handleSelect}>
             {selectedProduct.images.map((img) => (
               <Carousel.Item>
-                <Image className="d-block" fluid src={img} alt={img} />
+                <Image
+                  className="d-block"
+                  style={{ maxHeight: 300 }}
+                  src={img}
+                  alt={img}
+                />
               </Carousel.Item>
             ))}
           </Carousel>
